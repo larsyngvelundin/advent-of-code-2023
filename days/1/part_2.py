@@ -2,7 +2,7 @@ import re
 from time import time
 
 from data import calibration_values
-from data import test as calibration_values
+# from data import test as calibration_values
 
 new_pattern = r'(one|two|three|four|five|six|seven|eight|nine|\d)'
 
