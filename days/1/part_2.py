@@ -34,35 +34,35 @@ def main():
 
     print(f"main sum: {sum}")
 
-def main_alt(): #broken due to combined words, but slightly faster
-    #'eightwo' will be converted to 'eigh2' instead of '82'
+def main_alt(): #ugly but slightly faster (sometimes)
     sum = 0
     for value in calibration_values:
         value = value.replace(
-            'one', '1').replace(
-            'two', '2').replace(
-            'three', '3').replace(
-            'four', '4').replace(
-            'five', '5').replace(
-            'six', '6').replace(
-            'seven', '7').replace(
-            'eight', '8').replace(
-            'nine', '9')
+            'one', 'o1ne').replace(
+            'two', 't2wo').replace(
+            'three', 'th3ree').replace(
+            'four', 'fo4ur').replace(
+            'five', 'fi5ve').replace(
+            'six', 's6ix').replace(
+            'seven', 'se7ven').replace(
+            'eight', 'eig8ht').replace(
+            'nine', 'ni9ne')
         
         digits = re.findall(r'\d', value)
         full_number = digits[0] + digits[-1]
         sum += int(full_number)
     print(f"alt sum: {sum}")
 
+
 if (__name__ == "__main__"):
     start_time_total = time()
     main()
     end_time = time()
     elapsed_time = end_time - start_time_total
-    print(f"- Total time: {elapsed_time:.3f}")
+    print(f"- Total time: {elapsed_time:.5f}")
 
     start_time_total = time()
     main_alt()
     end_time = time()
     elapsed_time = end_time - start_time_total
-    print(f"- Total time: {elapsed_time:.3f}")
+    print(f"- Total time: {elapsed_time:.5f}")
