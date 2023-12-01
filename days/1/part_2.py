@@ -2,9 +2,8 @@ import re
 from time import time
 
 from data import calibration_values
-# from data import test as calibration_values
 
-new_pattern = r'(one|two|three|four|five|six|seven|eight|nine|\d)'
+new_pattern = r'(?=(one|two|three|four|five|six|seven|eight|nine|\d))'
 
 digit_dict = {
     'one': '1',
@@ -26,7 +25,6 @@ def get_full_number(first, last):
     return first + last
 
 
-
 def main():
     sum = 0
     for value in calibration_values:
@@ -37,7 +35,7 @@ def main():
     print(f"main sum: {sum}")
 
 def main_alt(): #broken due to combined words, but slightly faster
-    #'eightwo' will be converted to 'eigh2' instead of '8wo' or '82'
+    #'eightwo' will be converted to 'eigh2' instead of '82'
     sum = 0
     for value in calibration_values:
         value = value.replace(
@@ -62,6 +60,7 @@ if (__name__ == "__main__"):
     end_time = time()
     elapsed_time = end_time - start_time_total
     print(f"- Total time: {elapsed_time:.3f}")
+
     start_time_total = time()
     main_alt()
     end_time = time()
