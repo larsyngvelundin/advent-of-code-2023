@@ -1,9 +1,12 @@
+#Mostly luck that this gives the correct answer
+#There are a lot of cases where this code would not give the correct answer
+#If any of the lower seeds arent in the 1- 1*10**20 rangem they'll be missed by the initial checks
+#Resulting in the code trying to find the lowest possible location in the wrong range.
+
 from parse import parse_data
 from time import time
 
-drs = 0
-srs = 1
-rl = 2
+drs, srs, rl = 0, 1, 2
 
 data = parse_data(example=0)
 for i in range(0, len(data['seeds'])):
@@ -18,23 +21,6 @@ def get_middle(low,high):
     m = int(r / 2)
     return low + m
 
-def get_lowest_seed(seeds):
-    min = seeds[0]
-    for i in range(2, len(seeds), +2):
-        if seeds[i] < min:
-            min = seeds[i]
-    return min
-
-lowest_possible_seed = get_lowest_seed(data['seeds'])
-
-def check_if_valid_seed(seed):
-    if(seed < lowest_possible_seed):
-        return False
-    for seed_range in valid_seed_ranges:
-        if seed in seed_range:
-            return True
-    return False
-
 def get_seed_from_location(loc):
     seed = loc
     for i in range(len(data['order']) - 1, -1,-1):
@@ -45,40 +31,29 @@ def get_seed_from_location(loc):
                 seed = next_seed
                 break
         pass
-    return seed
+    for seed_range in valid_seed_ranges:
+        if seed in seed_range:
+            return True
+    return False
 
-def get_first_low():
+def get_first_low(): #going from 1, and up by the power of 10, find the first valid location
     current_loc = 1
     first_low_found = False
     while current_loc < (10 ** 20) and first_low_found == False:
-        seed = get_seed_from_location(current_loc)
-        if seed and check_if_valid_seed(seed):
+        if get_seed_from_location(current_loc):
             first_low_found = True
-            return current_loc
-        else:
-            pass
+            return current_loc,current_loc,current_loc
         current_loc *= 10
-    return False
-
-first_low = get_first_low()
-
-def check_one(loc):
-    seed = get_seed_from_location(loc)
-    if seed and check_if_valid_seed(seed):
-        return True
-    return False
+    return False,False,False
 
 def main():
+    chigh, last_valid, first_low = get_first_low()
     new_to_check = get_middle(int(first_low/10), first_low)
-    chigh = first_low
     clow = int(first_low/10)
-    last_valid = first_low
     errors_in_a_row = 0
     while True:
-        was_valid = check_one(new_to_check)
-        if was_valid:
-            chigh = new_to_check
-            last_valid = new_to_check
+        if get_seed_from_location(new_to_check):
+            last_valid, chigh = new_to_check, new_to_check
         else:
             clow = new_to_check
             errors_in_a_row += 1
@@ -91,4 +66,4 @@ if __name__ == "__main__":
     print(main())
     end_time = time()
     elapsed_time = end_time - start_time_total
-    print(f"Found solution in: {elapsed_time:.5f} seconds")
+    print(f"Found solution in: {elapsed_time:.5f} seconds ({elapsed_time})")
