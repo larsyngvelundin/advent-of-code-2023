@@ -1,7 +1,10 @@
-def parse_data(example=False):
+def parse_data(example=False, part2=False):
     file_name = "data.txt"
     if example:
-        file_name = "example_data.txt"
+        if part2:
+            file_name = "example_data2.txt"
+        else:
+            file_name = "example_data.txt"
     data = {}
     nodes = {}
     line_number = 0
