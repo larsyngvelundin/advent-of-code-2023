@@ -1,16 +1,6 @@
 from parse import parse_data
 
-data = parse_data(example = 1)
-
-print(data)
-
-# for seq in data:
-#     print(f"###New sequence###")
-#     end_values = []
-#     current_range = 0
-#     for i in range(0, len(seq)-1):
-#         print(seq[i+1] - seq[i])
-
+data = parse_data(example = 0)
 
 def get_new_list(seq):
     new_seq = []
@@ -22,11 +12,14 @@ def check_if_all_zero(seq):
     return seq == [0]*len(seq)
 
 def main():
+    total = 0
     for seq in data:
+        seq_total = 0
         while check_if_all_zero(seq) == False:
-            print(f"Checking {seq}")
+            seq_total += seq[-1]
             seq = get_new_list(seq)
-            input("")
+        total += seq_total
+    print(f"Full total: {total}")
 
 if (__name__ == "__main__"):
     main()
