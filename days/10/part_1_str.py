@@ -32,9 +32,30 @@ def check_if_matching_v(first,second):
         return [False, None]
     return("something went wrong :(")
 
-# for char1 in all_chars:
-#     for char2 in all_chars:
-#         print(f"{char1}{char2} = {check_if_matching_v(char1,char2)}")
+# 7-F7-
+# .FJ|7
+# SJLL7
+# |F--J
+# LJ.LJ
+
+#['X', 'X', '7', 'J', 'J']
+#X
+#X
+#7
+#J
+#J
+def check_if_matching_h(first,second):
+    f, s = first, second
+    if(d[f][down] and d[s][up]):
+        return [True]
+    if(d[f][down] and not d[s][up]):
+        return [False, 1]
+    if(not d[f][down] and d[s][up]):
+        return [False, 2]
+    if(not d[f][down] and not d[s][up]):
+        return [False, None]
+    return("something went wrong :(")
+
 
 for y in range(0, len(data)):
     data_test = list(data[y])
@@ -42,15 +63,46 @@ for y in range(0, len(data)):
     while x < len(data_test)-1:
     # for x in range(0,len(data_test)-1):
         res = check_if_matching_v(data_test[x],data_test[x+1])
-        print(res)
+        # print(res)
         if (not res[0]):
             if (res[1]):
                 data_test[x + res[1] - 1] = "X"
-                print(f"before{x}")
+                # print(f"before{x}")
                 x -= 2
-                print(f"after{x}")
+                # print(f"after{x}")
         x += 1
     data[y] = "".join(data_test)
+
+for row in data:
+    print(row)
+
+for x in range(0, len(data[0])):
+    data_test = ""
+    for y in range(0, len(data)):
+        data_test += data[y][x]
+    data_test = list(data_test)
+    print(f"The data_Test in x is : {data_test}")
+    y = 0
+    print("NEW Y LOOP NEW Y LOOP NEW Y LOOP NEW Y LOOP NEW Y LOOP NEW Y LOOP ")
+    while y < len(data_test)-1:
+    # for x in range(0,len(data_test)-1):
+        print("==================")
+        print(f"Trying to check if valid:\n{data_test[y]}\n{data_test[y+1]}")
+        res = check_if_matching_h(data_test[y],data_test[y+1])
+        # print(res)
+        if (not res[0]):
+            if (res[1] and data_test[y + res[1] - 1] != "S"):
+                data_test[y + res[1] - 1] = "X"
+                print(f"data_test here: {data_test}")
+                print(f"Tried to add X at {y + res[1] - 1}")
+                # print(f"before{x}")
+                y -= 2
+                # print(f"after{x}")
+        y += 1
+    # data[y] = "".join(data_test)
+
+# pivot_2d(data)
+
 
 for row in data:
     print(row)
