@@ -1,12 +1,9 @@
 from parse import parse_data
-from time import sleep
 data = parse_data(example=0)
 
 all_chars = "|-LJ7F"
 
-
 up, right, down, left = 0, 1, 2, 3
-print(up, right, down, left)
 directions = {
     '-': [False, True, False, True],
     '|': [True, False, True, False],
@@ -32,18 +29,6 @@ def check_if_matching_h(first,second):
         return [False, None]
     return("something went wrong :(")
 
-# 7-F7-
-# .FJ|7
-# SJLL7
-# |F--J
-# LJ.LJ
-
-#['X', 'X', '7', 'J', 'J']
-#X
-#X
-#7
-#J
-#J
 def check_if_matching_v(first,second):
     f, s = first, second
     if(d[f][down] and d[s][up]):
@@ -55,7 +40,6 @@ def check_if_matching_v(first,second):
     if(not d[f][down] and not d[s][up]):
         return [False, None]
     return("something went wrong :(")
-
 
 def clear_h(data, still_clearing):
     still_clearing = False
@@ -71,11 +55,7 @@ def clear_h(data, still_clearing):
                     x -= 2
             x += 1
         data[y] = "".join(data_test)
-    print(f"Returning {still_clearing}")
     return still_clearing
-
-# for row in data:
-#     print(row)
 
 def clear_v(data, still_clearing):
     still_clearing = False
@@ -100,41 +80,85 @@ def clear_v(data, still_clearing):
             temp_list = "".join(temp_list)
             data[y] = temp_list
             y += 1
-    print(f"Returning {still_clearing}")
     return still_clearing
 
 
+def clear_edges(data):
+    #up
+    up_row = list(data[0])
+    for i in range(0,len(up_row)):
+        if(d[up_row[i]][up]):
+            up_row[i] = "."
+    up_row = "".join(up_row)
+    data[0] = up_row
+    #down
+    down_row = list(data[len(data)-1])
+    for i in range(0,len(down_row)):
+        if(d[down_row[i]][down]):
+            down_row[i] = "."
+    down_row = "".join(down_row)
+    data[len(data)-1] = down_row
+    left_row = ""
+    right_row = ""
+    #left and right
+    for y in range(0, len(data)):
+        left_row += data[y][0]
+        right_row += data[y][-1]
+    left_row = list(left_row)
+    right_row = list(right_row)
+    for i in range(0,len(left_row)):
+        if(d[left_row[i]][left]):
+            left_row[i] = "."
+        if(d[right_row[i]][right]):
+            right_row[i] = "."
+        
+    for y in range(0, len(data)):
+        temp_list = list(data[y])
+        temp_list[0] = left_row[y]
+        temp_list[-1] = right_row[y]
+        temp_list = "".join(temp_list)
+        data[y] = temp_list
+    pass
+
+def clear_lone_loops(data):
+    for y in range(0, len(data)-1):
+        for x in range(0, len(data[y])-1):
+            if data[y][x:x+2] == "F7":
+                if data[y+1][x:x+2] == "LJ":
+                    temp_list = list(data[y])
+                    temp_list[x] = "."
+                    temp_list = "".join(temp_list)
+                    data[y] = temp_list
 
 
+def print_map(data):
+    for row in data:
+        print(row.replace("-","═").
+                replace("|", "║").
+                replace("F", "╔").
+                replace("7", "╗").
+                replace("J", "╝").
+                replace("L", "╚"))
 
 def main():
+    clear_edges(data)
+    clear_lone_loops(data)
     still_clearing = True
     while still_clearing:
         t_h = clear_h(data, still_clearing)
         t_v = clear_v(data, still_clearing)
         still_clearing = t_h + t_v
-        # sleep(1)
+        
+    print_map(data)
+    dot_count = 0
+    for row in data:
+        dot_count += row.count(".")
+    print(f"Found {dot_count} dots")
+    square_count = len(data) * len(data[0])
+    print(f"There is a total of {square_count} squares")
+    print(f"That minus the dots is {square_count - dot_count}")
+    print(f"So that means the answer is {(square_count - dot_count)/2}")
 
 
 if __name__ == "__main__":
     main()
-
-
-
-for row in data:
-    print(row.replace("-","═").
-          replace("|", "║").
-          replace("F", "╔").
-          replace("7", "╗").
-          replace("J", "╝").
-          replace("L", "╚"))
-    # if data[]
-#try to count all non-periods?
-dot_count = 0
-for row in data:
-    dot_count += row.count(".")
-print(f"Found {dot_count} dots")
-square_count = len(data) * len(data[0])
-print(f"There is a total of {square_count} squares")
-print(f"That minus the dots is {square_count - dot_count}")
-print(f"So that means the answer is {(square_count - dot_count)/2}")
